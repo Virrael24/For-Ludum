@@ -4,7 +4,7 @@ using System.Collections;
 
 public class Scene2Controller : MonoBehaviour
 {
-    public GameObject targetObject; // Объект, который нужно сделать активным
+    public GameObject[] targetObject; // Объект, который нужно сделать активным
     public Image instructionsImage; // Изображение, которое будет отображаться по окончании таймера
     public AudioClip endSound; // Звук, который будет проигрываться по окончании таймера
 
@@ -12,14 +12,26 @@ public class Scene2Controller : MonoBehaviour
 
     void Start()
     {
-        targetObject.SetActive(SceneStateManager.isObjectActive); // Устанавливаем активность объекта
+        int i = 0;
+        foreach (var item in SceneStateManager.isObjectActive.Values) 
+        {
+            if (targetObject[i])
+            {
+                targetObject[i].SetActive(item);
+            }
+
+            Debug.Log(item.ToString());
+
+            Debug.Log(i);
+            i++;
+            if (item)
+            {
+                StartCoroutine(CountdownCoroutine());
+            }
+        }
+         // Устанавливаем активность объекта
         audioSource = gameObject.AddComponent<AudioSource>(); // Добавляем AudioSource, если его ещё нет
 
-        // Запускаем таймер
-        if (SceneStateManager.isObjectActive)
-        {
-            StartCoroutine(CountdownCoroutine());
-        }
 
         instructionsImage.gameObject.SetActive(false); // Скрываем изображение в начале
     }

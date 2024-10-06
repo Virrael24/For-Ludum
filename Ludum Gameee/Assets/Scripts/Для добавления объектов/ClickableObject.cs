@@ -1,14 +1,20 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ClickableObject : MonoBehaviour
 {
+    public DetailsEnum Details;
     void OnMouseDown()
     {
         // Сохраняем позиции всех Rigidbody перед загрузкой новой сцены
         SaveRigidbodyPositions();
-
-        SceneStateManager.isObjectActive = true; // Устанавливаем состояние перед загрузкой новой сцены
+        SceneStateManager.isObjectActive = new System.Collections.Generic.Dictionary<DetailsEnum, bool>();
+        foreach (object kvp in Enum.GetValues(typeof(DetailsEnum)))
+        {
+            SceneStateManager.isObjectActive[(DetailsEnum)kvp] = false;
+        }
+        SceneStateManager.isObjectActive[Details] = true; // Устанавливаем состояние перед загрузкой новой сцены
         SceneManager.LoadScene("Тестовая сцена"); // Замените "Тестовая сцена" на имя вашей второй сцены
     }
 
